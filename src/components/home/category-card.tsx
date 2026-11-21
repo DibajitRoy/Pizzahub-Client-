@@ -17,8 +17,8 @@ export function CategoryCard({ category, delay }: { category: Category; delay: n
   return (
     <Reveal delay={delay}>
       <Link href={`/menu?category=${encodeURIComponent(category.name)}`} className="group relative block aspect-[4/3] overflow-hidden rounded-2xl bg-brand shadow-sm">
-        <SafeImg src={image} alt={category.name} className="size-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-110" />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand/90 via-brand/20 to-transparent" />
+        <SafeImg src={image} alt={category.name} className="home-category-image size-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-110" />
+        <div className="home-category-overlay absolute inset-0 bg-gradient-to-t from-brand/90 via-brand/20 to-transparent" />
         <div className="absolute bottom-0 p-4 sm:p-5">
           <h3 className="text-base font-bold text-white sm:text-xl">{category.name}</h3>
           <p className="text-xs text-gold sm:text-sm">{category.blurb}</p>

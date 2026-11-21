@@ -122,6 +122,28 @@
 .dark .bg-white\/90 { background-color: rgb(33 29 25 / 90%); }
 .dark .bg-white\/95 { background-color: rgb(33 29 25 / 95%); }
 
+.dark .home-hero-image {
+  filter: brightness(0.78) saturate(0.84);
+}
+
+.dark .home-hero-overlay {
+  background: linear-gradient(to right, rgb(23 20 18 / 94%) 0%, rgb(23 20 18 / 76%) 48%, rgb(23 20 18 / 22%) 100%);
+}
+
+.dark .home-category-image {
+  filter: brightness(0.82) saturate(0.82);
+}
+
+.dark .home-category-overlay {
+  background: linear-gradient(to top, rgb(23 20 18 / 92%) 0%, rgb(23 20 18 / 28%) 52%, transparent 100%);
+}
+
+@media (max-width: 767px) {
+  .dark .home-hero-overlay {
+    background: linear-gradient(to right, rgb(23 20 18 / 96%) 0%, rgb(23 20 18 / 86%) 50%, rgb(23 20 18 / 58%) 100%);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

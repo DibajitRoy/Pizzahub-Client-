@@ -9,8 +9,8 @@ export function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-brand">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/bannerpizzahub.png" alt="" className="absolute inset-0 -z-20 size-full object-cover object-[78%_center]" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand via-brand/80 to-brand/10 max-md:from-brand/90 max-md:via-brand/75 max-md:to-brand/50" />
+      <img src="/bannerpizzahub.png" alt="" className="home-hero-image absolute inset-0 -z-20 size-full object-cover object-[78%_center]" />
+      <div className="home-hero-overlay absolute inset-0 -z-10 bg-gradient-to-r from-brand via-brand/80 to-brand/10 max-md:from-brand/90 max-md:via-brand/75 max-md:to-brand/50" />
       <div className="mx-auto flex min-h-[560px] max-w-7xl items-center px-4 py-20 sm:px-6 lg:min-h-[640px]">
         <motion.div className="max-w-xl" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-gold backdrop-blur">
