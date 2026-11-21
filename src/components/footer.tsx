@@ -11,7 +11,7 @@ export function Footer() {
     { label: "LinkedIn", href: "https://linkedin.com", icon: <LinkedinIcon /> },
   ];
   return (
-    <footer className="bg-brand text-white/80">
+    <footer className="site-footer bg-brand text-white/80">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-1">
           <Logo light />

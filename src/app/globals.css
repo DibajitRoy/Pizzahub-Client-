@@ -95,17 +95,17 @@
   color-scheme: dark;
   --brand: #f8c46a;
   --cream: #241a12;
-  --background: #171412;
+  --background: #201a15;
   --foreground: #f8eee4;
-  --card: #211d19;
+  --card: #29231d;
   --card-foreground: #f8eee4;
-  --popover: #211d19;
+  --popover: #29231d;
   --popover-foreground: #f8eee4;
   --primary: #f5a30a;
   --primary-foreground: #24170a;
   --secondary: #34281c;
   --secondary-foreground: #f8eee4;
-  --muted: #2b2520;
+  --muted: #332b24;
   --muted-foreground: #c0aea0;
   --accent: #3d2e1b;
   --accent-foreground: #ffe4a6;
@@ -123,24 +123,32 @@
 .dark .bg-white\/95 { background-color: rgb(33 29 25 / 95%); }
 
 .dark .home-hero-image {
-  filter: brightness(0.78) saturate(0.84);
+  filter: brightness(1.06) saturate(0.92);
 }
 
 .dark .home-hero-overlay {
-  background: linear-gradient(to right, rgb(23 20 18 / 94%) 0%, rgb(23 20 18 / 76%) 48%, rgb(23 20 18 / 22%) 100%);
+  background: linear-gradient(to right, rgb(32 26 21 / 68%) 0%, rgb(32 26 21 / 42%) 48%, rgb(32 26 21 / 6%) 100%);
 }
 
 .dark .home-category-image {
-  filter: brightness(0.82) saturate(0.82);
+  filter: brightness(0.92) saturate(0.88);
 }
 
 .dark .home-category-overlay {
-  background: linear-gradient(to top, rgb(23 20 18 / 92%) 0%, rgb(23 20 18 / 28%) 52%, transparent 100%);
+  background: linear-gradient(to top, rgb(32 26 21 / 88%) 0%, rgb(32 26 21 / 24%) 52%, transparent 100%);
+}
+
+.dark .home-vendor-cta {
+  background-color: #38271e;
+}
+
+.dark .site-footer {
+  background-color: #2b1e18;
 }
 
 @media (max-width: 767px) {
   .dark .home-hero-overlay {
-    background: linear-gradient(to right, rgb(23 20 18 / 96%) 0%, rgb(23 20 18 / 86%) 50%, rgb(23 20 18 / 58%) 100%);
+    background: linear-gradient(to right, rgb(32 26 21 / 78%) 0%, rgb(32 26 21 / 62%) 50%, rgb(32 26 21 / 34%) 100%);
   }
 }
 
