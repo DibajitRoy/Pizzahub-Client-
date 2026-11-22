@@ -1,7 +1,7 @@
 "use client";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { AuthShell } from "@/components/auth-shell";
@@ -11,27 +11,40 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/password-input";
 import { clearTokenCache } from "@/lib/api";
-import { authClient } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 
 function SignInForm() {
-  const router = useRouter();
   const sp = useSearchParams();
+  const { data: session, isPending } = useSession();
   const r = sp.get("redirect");
   const dest = r && r.startsWith("/") && !r.startsWith("//") ? r : "/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
+  useEffect(() => {
+    if (!isPending && session?.user) window.location.replace(dest);
+  }, [dest, isPending, session]);
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !password) return toast.error("Please enter your email and password");
     setBusy(true);
-    const { error } = await authClient.signIn.email({ email, password });
-    setBusy(false);
-    if (error) return toast.error(error.message || "Invalid email or password");
-    clearTokenCache();
-    toast.success("Welcome back!");
-    router.push(dest);
+    try {
+      const { error } = await authClient.signIn.email({ email, password });
+      if (error) {
+        toast.error(error.message || "Invalid email or password");
+        return;
+      }
+      clearTokenCache();
+      toast.success("Welcome back!");
+      // Reload so the dashboard and its role guard read the newly created session.
+      window.location.replace(dest);
+    } catch {
+      toast.error("Unable to sign in. Please try again.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function google() {
