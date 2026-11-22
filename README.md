@@ -1,38 +1,53 @@
 # PizzaHub
 
-PizzaHub is a role based pizza ordering and delivery platform. Customers browse local restaurant menus and place orders, vendors manage menu items and incoming orders, and admins review listings and monitor the platform.
+PizzaHub is a full-stack pizza ordering platform for customers, restaurants, and administrators. Customers can discover local menus, save favorites, and place orders. Vendors manage their restaurant menus and orders, while admins review listings and oversee the platform.
+
+**Live app:** [pizzahub-client-alpha-wine.vercel.app](https://pizzahub-client-alpha-wine.vercel.app/)
 
 ## Features
 
-- Email/password and Google sign in with Better Auth; public sign up supports customer and vendor accounts. Admin accounts are assigned with the server's `make-admin` script.
-- Public menu search by name and description, category and location filters, pagination, and newest/price sorting.
-- Item details, customer favorites, order placement, order status tracking, and cancellation of pending orders.
-- Vendor dashboards for menu management, availability, orders, and Free/Premium subscription status.
-- Admin dashboards for users, menu review, transactions, charts, and optional user blocking.
-- Premium activation and expiration are controlled by verified Stripe webhooks.
-- Menu item image uploads use ImgBB. Profile images are optional.
-- Responsive pizza themed interface, loading/empty/error states, toast messages, animation, and an order status timeline.
-- API requests go through a same-origin Next.js route handler, avoiding browser CORS failures when talking to the Express server.
+- Email/password and Google authentication with Better Auth.
+- Customer and vendor registration, with role-based dashboards and access controls.
+- Menu discovery with search, category and location filters, pagination, and price or newest sorting.
+- Menu item details, customer favorites, order placement, order status tracking, and pending-order cancellation.
+- Vendor tools for menu management, availability, customer orders, and Free/Premium plan status.
+- Admin tools for users, menu review, transactions, and platform charts.
+- Stripe subscription checkout. Verified Stripe webhooks control Premium activation and expiration.
+- ImgBB-hosted menu item uploads and optional profile photos.
+- Responsive interface with loading, empty, and error states.
 
 ## Technology
 
-- Client: Next.js App Router 16, React 19, TypeScript, Tailwind CSS 4, ShadCN-style UI components, Motion, Recharts, Lucide.
-- Authentication/data: Better Auth, MongoDB.
-- Server: Express 5, MongoDB driver, `jose` JWT/JWKS verification, Stripe SDK.
-- Image hosting: ImgBB.
+| Area | Stack |
+| --- | --- |
+| Client | Next.js App Router 16, React 19, TypeScript, Tailwind CSS 4 |
+| UI | ShadCN-style components, Motion, Recharts, Lucide |
+| Authentication | Better Auth with email/password, Google OAuth, and JWT |
+| Data | MongoDB |
+| API server | Express 5, MongoDB driver, `jose` JWT/JWKS verification |
+| Payments | Stripe |
+| Image uploads | ImgBB |
 
-## Local development
+## Run locally
 
-Requires Node.js and npm. Configure the environment files below before starting either app.
+### Requirements
 
-1. Install client dependencies and run Next.js:
+- Node.js and npm
+- MongoDB connection string
+- The PizzaHub Express server project, expected beside this repository at `../pizzahub(server)`
+- Optional integrations: Google OAuth, ImgBB, and Stripe
+
+### Install and start
+
+1. Configure the client and server environment variables below.
+2. In this repository, install dependencies and start Next.js:
 
    ```bash
    npm install
    npm run dev
    ```
 
-2. In a second terminal, open the server project (currently expected at `../pizzahub(server)`), install dependencies, and run Express:
+3. In another terminal, start the Express server:
 
    ```bash
    cd "../pizzahub(server)"
@@ -40,60 +55,105 @@ Requires Node.js and npm. Configure the environment files below before starting 
    npm run dev
    ```
 
-3. Open `http://localhost:3000`. The Express API listens on port `5000` by default.
+4. Open [http://localhost:3000](http://localhost:3000). The API server listens on port `5000` by default.
+
+The client forwards browser requests from `/api/...` to the Express API through a same-origin Next.js route handler.
 
 ## Environment variables
 
-Create a local `.env` in this client project and a local `.env` in the server project. Never commit either file or put real credentials in an example file.
+Create a private `.env` file in each project. Do not commit real credentials, secrets, or production connection strings. Set the production equivalents in the deployment platform's environment settings.
 
-### Client (`pizza-hub/.env`)
+### Client `.env`
 
-| Variable | Purpose |
-| --- | --- |
-| `MONGODB_URI` | MongoDB connection string used by Better Auth |
-| `MONGODB_DB` | Better Auth database name; defaults to `pizzahub` |
-| `BETTER_AUTH_SECRET` | Secret used by Better Auth |
-| `BETTER_AUTH_URL` | Public base URL for Better Auth; `http://localhost:3000` locally |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
-| `NEXT_PUBLIC_API_URL` | Express API base including `/api`; `http://localhost:5000/api` locally |
-| `IMGBB_API_KEY` | ImgBB upload API key |
+| Variable | Purpose | Local value or note |
+| --- | --- | --- |
+| `MONGODB_URI` | MongoDB connection used by Better Auth and the demo menu seed script | Your MongoDB connection string |
+| `MONGODB_DB` | Better Auth database name | Optional; defaults to `pizzahub` |
+| `BETTER_AUTH_SECRET` | Better Auth signing secret | Use a long, random secret |
+| `BETTER_AUTH_URL` | Public base URL for Better Auth | `http://localhost:3000` locally |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID | Required for Google sign-in |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | Required for Google sign-in |
+| `NEXT_PUBLIC_API_URL` | Express API base URL, including `/api` | `http://localhost:5000/api` |
+| `IMGBB_API_KEY` | Image upload API key | Required for ImgBB uploads |
 
-### Server (`pizzahub(server)/.env`)
+### Express server `.env`
 
-| Variable | Purpose |
-| --- | --- |
-| `MONGODB_URI` | MongoDB connection string |
-| `DB_NAME` | Business data database name; defaults to `pizzahub` |
-| `AUTH_URL` | Better Auth/JWKS base URL; `http://localhost:3000` locally |
-| `CLIENT_URL` | Allowed client origins, comma separated; first origin is used for Stripe redirects |
-| `PORT` | API port; defaults to `5000` |
-| `STRIPE_SECRET_KEY` | Server-only Stripe secret key |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
-| `PREMIUM_PRICE_CENTS` | Monthly Premium amount in cents; defaults to `999` |
+| Variable | Purpose | Local value or note |
+| --- | --- | --- |
+| `MONGODB_URI` | MongoDB connection used by the business API | Your MongoDB connection string |
+| `DB_NAME` | Business data database name | Optional; defaults to `pizzahub` |
+| `AUTH_URL` | Better Auth/JWKS URL used to verify client tokens | `http://localhost:3000` locally |
+| `CLIENT_URL` | Allowed client origins; separate multiple origins with commas | Include `http://localhost:3000` locally; first origin is used for Stripe redirects |
+| `PORT` | Express listening port | Optional; defaults to `5000` |
+| `STRIPE_SECRET_KEY` | Stripe server secret | Keep server-side only |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signature secret | Keep server-side only |
+| `PREMIUM_PRICE_CENTS` | Monthly Premium price in cents | Optional; defaults to `999` |
 
-For local Stripe webhook testing, forward `checkout.session.completed`, `invoice.paid`, `customer.subscription.updated`, and `customer.subscription.deleted` events to `/webhook/stripe` using the Stripe CLI. Keep the signing secret in the server environment only.
+For Google OAuth, add the deployed sign-in callback URL to the Google OAuth client configuration. For production, set `BETTER_AUTH_URL`, `AUTH_URL`, and `CLIENT_URL` to the correct deployed origins.
 
-## API and security notes
+## Admin account setup
 
-- Browser API calls to `/api/...` are forwarded by `src/app/api/backend/[...path]/route.ts` to the configured Express API. The frontend attaches the Better Auth JWT; Express verifies it against the Better Auth JWKS endpoint and loads the user from MongoDB.
-- Express applies role checks and resource ownership checks to private routes. Customer, vendor, and admin permissions are enforced on the server as well as in the UI.
-- Menu search uses `search`, `category`, `location`, `sort`, `page`, and `limit` query parameters. `sort` supports `newest`, `price_asc`, and `price_desc`.
-- Only approved menu items are returned by public browse/featured endpoints. Vendors can edit only their own items and orders.
-- Never activate Premium from a browser redirect. Only validated Stripe webhook events change the subscription and create paid transaction records.
-- Create an admin using `npm run make-admin -- <email>` in the server project after that account exists. Public registration cannot create admins.
+There is no default admin login, and public registration cannot assign the admin role.
 
-## Project and submission links
+1. Create an account through the app using the email address that should become the admin account.
+2. From the Express server project, run the server's admin assignment command:
 
-- Live site: not deployed yet
-- Client repository: not published yet
-- Server repository: not published yet
+   ```bash
+   npm run make-admin -- <email>
+   ```
 
-Add the final deployment and repository URLs here before submission. Maintain separate client and server repositories as required by the project brief.
+3. Sign in with that email and the password chosen during account creation.
+
+Share working admin credentials only through the private submission channel required by the project. Never put the password in this README, source control, or a public issue.
+
+## Demo menu data
+
+The client includes a demo menu seeding script. It finds the most recently created active vendor account and reports how many sample items could be added without exceeding the vendor's plan limit.
+
+From this repository, preview first:
+
+```bash
+node scripts/seed-demo-menu.mjs
+```
+
+To insert the sample items into the database configured by the client `MONGODB_URI`, run:
+
+```bash
+node scripts/seed-demo-menu.mjs --apply
+```
+
+Review the selected vendor and database before using `--apply`. The script inserts approved sample menu items.
+
+## Stripe webhooks
+
+For local webhook testing, use the Stripe CLI to forward these events to the Express server's `/webhook/stripe` endpoint:
+
+- `checkout.session.completed`
+- `invoice.paid`
+- `customer.subscription.updated`
+- `customer.subscription.deleted`
+
+Premium status is updated only by validated webhook events. Do not activate subscriptions based on a browser redirect.
+
+## Security and API behavior
+
+- Browser API calls to `/api/...` pass through `src/app/api/backend/[...path]/route.ts` and are forwarded to the configured Express API.
+- The client attaches a Better Auth JWT. Express verifies the token against Better Auth's JWKS endpoint and loads the user from MongoDB.
+- Role checks and resource ownership checks are enforced by the API as well as by the dashboard UI.
+- Public menu and featured endpoints return approved items only. Vendors can manage only their own items and orders.
+- Menu search accepts `search`, `category`, `location`, `sort`, `page`, and `limit`. Supported sort values are `newest`, `price_asc`, and `price_desc`.
+
+## Project links
+
+- Live app: [PizzaHub](https://pizzahub-client-alpha-wine.vercel.app/)
+- Client repository: add the published client repository URL before submission.
+- Server repository: add the published server repository URL before submission.
 
 ## Submission checklist
 
-- Provide working live site and separate public client/server repository links.
-- Add a working admin email and password through the submission channel; do not store the password in this repository.
-- Verify production OAuth callback URLs, CORS origins, database access, ImgBB uploads, and Stripe webhook delivery.
-- Build meaningful client and server commit history during development; do not create placeholder commits just to inflate the count.
+- [ ] Add the public client and server repository URLs.
+- [ ] Confirm the live app and API are available.
+- [ ] Verify production Google OAuth callback URLs, allowed client origins, and database access.
+- [ ] Verify ImgBB uploads and Stripe webhook delivery.
+- [ ] Create and verify an admin account; share its credentials only through the required private submission channel.
+- [ ] Maintain meaningful client and server commit history during development.
