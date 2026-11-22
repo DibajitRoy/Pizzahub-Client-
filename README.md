@@ -146,12 +146,12 @@ Premium status is updated only by validated webhook events. Do not activate subs
 ## Project links
 
 - Live app: [PizzaHub](https://pizzahub-client-alpha-wine.vercel.app/)
-- Client repository: add the published client repository URL before submission.
-- Server repository: add the published server repository URL before submission.
+- Client repository: [Pizzahub-Client-](https://github.com/DibajitRoy/Pizzahub-Client-)
+- Server repository: [Pizzahub-Server-](https://github.com/DibajitRoy/Pizzahub-Server-)
 
 ## Submission checklist
 
-- [ ] Add the public client and server repository URLs.
+- [x] Add the public client and server repository URLs.
 - [ ] Confirm the live app and API are available.
 - [ ] Verify production Google OAuth callback URLs, allowed client origins, and database access.
 - [ ] Verify ImgBB uploads and Stripe webhook delivery.
